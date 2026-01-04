@@ -25,6 +25,7 @@ C     === Global variables ===
 #include "SEAICE_SIZE.h"
 #include "SEAICE_PARAMS.h"
 #include "SEAICE.h"
+#include "EXF_FIELDS.h"
 
 C     !INPUT/OUTPUT PARAMETERS:
 C     === Routine arguments ===
@@ -78,8 +79,6 @@ C     Residual
       _RL vIceRESLoc(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 
 C      Each term 
-      _RL SImassX (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
-      _RL SImassY (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL MunewDt (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL MvnewDt (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL MuoldDt (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
@@ -148,7 +147,7 @@ C         CALL DIAGNOSTICS_FILL(dUdtY,'mdUdtY  ',0,1,0,1,1,myThid)
          CALL DIAGNOSTICS_FILL(uIceRHSLoc,'uIceRHS ',0,1,0,1,1,myThid)
          CALL DIAGNOSTICS_FILL(vIceRHSLoc,'vIceRHS ',0,1,0,1,1,myThid)
          CALL DIAGNOSTICS_FILL(uIceRESLoc,'uIceRES ',0,1,0,1,1,myThid)
-         CALL DIAGNOSTICS_FILL(vIceRESLoc,'vIceRES ',0,1,0,1,1,myThid)           
+         CALL DIAGNOSTICS_FILL(vIceRESLoc,'vIceRES ',0,1,0,1,1,myThid)
        ENDIF 
 
 #endif /* (  ALLOW_DIAGNOSTICS && defined SEAICE_CGRID )*/

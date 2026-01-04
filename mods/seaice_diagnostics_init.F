@@ -400,8 +400,25 @@ CEAW[
       diagCode  = 'VV      U1      '
       diagMate  = diagNum
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+      diagName  = 'TAU_AO_X'
+      diagTitle = 'Wind on ocean forcing in X momentum equation'
+      diagUnits = 'N/m^2           '
+      diagCode  = 'UU      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
      I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
 
+      diagName  = 'TAU_AO_Y'
+      diagTitle = 'Wind on ocean forcing in Y momentum equation'
+      diagUnits = 'N/m^2           '
+      diagCode  = 'VV      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      
       diagName  = 'uDWUi   '
       diagTitle = 'Seaice U LHS,DWATN*Ui term'
       diagUnits = 'm/s^2           '
