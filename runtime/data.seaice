@@ -1,6 +1,6 @@
 # SEAICE parameters
  &SEAICE_PARM01
-      SEAICEnonLinIterMax = 3000,
+      SEAICEnonLinIterMax = 2000,
       SEAICElinearIterMax = 5,
       SEAICE_multDim     = 7,
 #
@@ -11,6 +11,7 @@
       SEAICE_waterDrag   = 0.0054138,
       SEAICE_drag        = 0.00114,
       HO                 = 0.05,
+# Default ice strength = 2.75E+04      
 #
       SEAICE_dryIceAlb_south  = 0.8509,
       SEAICE_wetIceAlb_south  = 0.7284,
