@@ -6,8 +6,8 @@
  useEXF         = .TRUE.,
  useCAL         = .TRUE.,
  useOBCS        = .TRUE.,
+ useKPP         = .TRUE.,
 # Change to match LLC 
  useSALT_PLUME  = .FALSE.,
- useKPP         = .FALSE.,
 
 &

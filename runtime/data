@@ -39,8 +39,10 @@
  convertFW2Salt=-1
  useSingleCPUio=.TRUE.,
 #globalFiles=.TRUE.,
- implicSurfPress = 0.6,
- implicDiv2DFlow = 0.6,
+# To run using Crank Nicolson, switch the below to 0.5
+# Default is 1, and LLC used 0.6
+# implicSurfPress = 0.6,
+# implicDiv2DFlow = 0.6,
  &
 
 # Elliptic solver parameters
