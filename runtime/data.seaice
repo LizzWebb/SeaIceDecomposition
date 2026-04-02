@@ -21,7 +21,7 @@
       SEAICE_drag_south       = 0.0012114,
 #
       SEAICE_no_slip     = .TRUE.,
-      SEAICEadvScheme    = 7,
+      SEAICEadvScheme    = 77,
 #
       MIN_ATEMP          = -40.,
       MIN_TICE           = -40.,
