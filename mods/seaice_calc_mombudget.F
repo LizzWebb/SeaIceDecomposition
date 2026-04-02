@@ -291,7 +291,7 @@ C     V component of RHS of the model momentum equation
      &          ( uVel(I,J  ,kSrf,bi,bj)+uVel(I+1,J  ,kSrf,bi,bj))
      &         + DWATN(I,J-1,bi,bj) * 0.5 _d 0 *
      &          ( uVel(I,J-1,kSrf,bi,bj)+uVel(I+1,J-1,kSrf,bi,bj))
-     &     ) )*areaS(I,J)*maskinS(I,J,bi,bj)
+     &     ) )*maskinS(I,J,bi,bj)
 C       
          uIceRHS(I,J,bi,bj) = (MuoldDt(I,J,bi,bj) + uDWUo(I,J,bi,bj)
      &     + TILTx(I,J,bi,bj) + TAU_AI_X(I,J,bi,bj) )*maskinW(I,J,bi,bj)
@@ -481,7 +481,7 @@ C     ocean-ice and bottom drag terms: + (Cdrag*cosWat+Cb)*uIce - vIce*sinWat)
      &         (vIceLoc(I  ,J,bi,bj)+vIceLoc(I  ,J+1,bi,bj))
      &         +  DWATN(I-1,J,bi,bj) * 0.5 _d 0 *
      &         (vIceLoc(I-1,J,bi,bj)+vIceLoc(I-1,J+1,bi,bj))
-     &         ) ) * areaW(I,J)*maskinW(I,J,bi,bj)
+     &         ) ) *maskinW(I,J,bi,bj)
           
 C     mass*(vIce)/deltaT - dsigma/dy
           dsigY(I,J,bi,bj) = - dsigY(I,J,bi,bj)
