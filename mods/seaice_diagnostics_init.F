@@ -326,7 +326,109 @@ c    I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
       diagMate  = diagNum
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
      I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+CEAW[             TEMP DIAGNOSTICS                                                                                                                                            
+      diagName  = 'DXsig11E'
+      diagTitle = 'Part of dsig X component that has eta'
+      diagUnits = 'kg              '
+      diagCode  = 'UU      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
 
+      diagName  = 'DXsig11Z'
+      diagTitle = 'Part of dsig X component that has zeta'
+      diagUnits = 'kg              '
+      diagCode  = 'UU      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'DXsig11P'
+      diagTitle = 'Part of dsig X component that has P'
+      diagUnits = 'kg              '
+      diagCode  = 'UU      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'DXsig12E'
+      diagTitle = 'Part of dsig X component that has sigma12'
+      diagUnits = 'kg              '
+      diagCode  = 'UU      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+     
+C-- V component       
+      diagName  = 'DYsig22E'
+      diagTitle = 'Part of dsig Y component that has eta'
+      diagUnits = 'kg              '
+      diagCode  = 'VV      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'DYsig22Z'
+      diagTitle = 'Part of dsig Y component that has zeta'
+      diagUnits = 'kg              '
+      diagCode  = 'VV      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'DYsig22P'
+      diagTitle = 'Part of dsig Y component that has P'
+      diagUnits = 'kg              '
+      diagCode  = 'VV      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'DYsig12E'
+      diagTitle = 'Part of dsig Y component that has sigma12'
+      diagUnits = 'kg              '
+      diagCode  = 'VV      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+
+C     -- Combined/summed
+      diagName  = 'dsigXtst'
+      diagTitle = 'Testing dsig X component'
+      diagUnits = 'kg              '
+      diagCode  = 'UU      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'dsigYtst'
+      diagTitle = 'Testing dsig Y component'
+      diagUnits = 'kg              '
+      diagCode  = 'VV      U1      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'eplus   '
+      diagTitle = 'strain e11 + e22'
+      diagUnits = 'm^2/m^2         '
+      diagCode  = 'SM      M1      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      numArea  = diagNum
+      
+      diagName  = 'eminus  '
+      diagTitle = 'Strain e11-e22'
+      diagUnits = 'm^2/m^2         '
+      diagCode  = 'SM      M1      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      numArea  = diagNum
+      
+CEAW TEMP DIAGNOSTICS ] 
+
+      
 CEAW[  
       diagName  = 'SImassU '
       diagTitle = 'SeaIce mass at U point'
@@ -534,6 +636,13 @@ CEAW[
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
      I     diagName, diagCode, diagUnits, diagTitle, 0, myThid )
 
+      diagName  = 'SIRESmag'
+      diagTitle = 'Lizzs Sea Ice Residual Magnitude'
+      diagUnits = 'unit            '
+      diagCode  = 'SM      M1      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I     diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      
       diagName  = 'SIuvel  '
       diagTitle = 'Seaice velocity y-comp used to calculate div sigma'
       diagUnits = 'm/s             '

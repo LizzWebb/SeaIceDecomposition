@@ -45,7 +45,7 @@ C     bi,bj  :: tile counters
       INTEGER RHSiMax, RHSiMin, RHSjMax, RHSjMin
 C     Vertical integers: k from LHS, ksurf from RHS 
       INTEGER kSrf
-      
+C      LOGICAL calcMeanResid      
 C     fractional area at velocity points
 C     Note, we follow the below from LHS      
 C      _RL areaW(1:sNx,1:sNy)
@@ -77,8 +77,10 @@ C     u/vIceLHS :: LHS of momentum equations
 C     Residual 
       _RL uIceRESLoc(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL vIceRESLoc(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      _RL IceRESMagLoc(1:sNx,1:sNy)
+      _RL residU, residV
 
-C      Each term 
+C     Each term 
       _RL MunewDt (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL MvnewDt (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL MuoldDt (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
@@ -96,7 +98,11 @@ C      Each term
       _RL dsigX (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL dsigY (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 
-      
+C      _RL resSquaredSum
+C      _RL iceAreaSum
+C      _RL areaWeight
+C      _RL IceRESRMS
+
 C     EAW[DO: Re-calculate RHS and LHS of momentum equation.                           
       CALL SEAICE_CALC_MOMBUDGET_RHS(
      I     uIce_prev, vIce_prev, TILTx, TILTy, TAU_AI_X, TAU_AI_Y,
@@ -109,6 +115,12 @@ C     EAW[DO: Re-calculate RHS and LHS of momentum equation.
      &     coriX, coriY, uDWUi, vDWUi,
      I     myTime, myIter, myThid )
 
+
+C--   Calculate residual                                                                                                                      
+C initial average residual in component form 
+      residU = 0.
+      residV = 0.
+       
        DO bj=myByLo(myThid),myByHi(myThid)
         DO bi=myBxLo(myThid),myBxHi(myThid)
          DO J=1,sNy
@@ -118,10 +130,68 @@ C     EAW[DO: Re-calculate RHS and LHS of momentum equation.
              vIceRESLoc(I,J,bi,bj) =
      &               vIceLHSLoc(I,J,bi,bj) - vIceRHSLoc(I,J,bi,bj)
           ENDDO
-         ENDDO
+       ENDDO
+
+C--   Calculate final residual of the full system
+C      IF ( calcMeanResid ) THEN
+        DO j=1,sNy
+          DO i=1,sNx
+            residU = residU
+     &             + uIceRESLoc(i,j,bi,bj)
+     &              *uIceRESLoc(i,j,bi,bj)
+     &              *rAw(i,j,bi,bj)*maskInW(i,j,bi,bj)
+#ifndef OBCS_UVICE_OLD
+     &              *maskInC(i,j,bi,bj)*maskInC(i-1,j,bi,bj)
+#endif
+            residV = residV
+     &             + vIceRESLoc(i,j,bi,bj)
+     &              *vIceRESLoc(i,j,bi,bj)
+     &              *rAs(i,j,bi,bj)*maskInS(i,j,bi,bj)
+#ifndef OBCS_UVICE_OLD
+     &              *maskInC(i,j,bi,bj)*maskInC(i,j-1,bi,bj)
+#endif
+          ENDDO
+        ENDDO
+C     ENDIF
         ENDDO
        ENDDO
 
+C      IF ( calcMeanResid ) THEN
+       _GLOBAL_SUM_RL( residU, myThid )
+       _GLOBAL_SUM_RL( residV, myThid )
+C     scale residuals by globalArea so that they do not get ridiculously large                                                               \
+
+       IF ( residU.GT.0. ) residU = SQRT(residU/globalArea)
+       IF ( residV.GT.0. ) residV = SQRT(residV/globalArea)
+C      ENDIF
+
+       CALL EXCH_UV_XY_RL( uIceRESLoc,vIceRESLoc,.TRUE.,myThid)
+       DO bj = myByLo(myThid), myByHi(myThid)
+        DO bi = myBxLo(myThid), myBxHi(myThid)
+         DO j=1,sNy
+          DO i=1,sNx
+           IceRESMagLoc(i,j) = SQRT( HALF * (
+     &            uIceRESLoc(i,  j,bi,bj) * uIceRESLoc(i,  j,bi,bj)
+     &          + uIceRESLoc(i+1,j,bi,bj) * uIceRESLoc(i+1,j,bi,bj)
+     &          + vIceRESLoc(i,j,  bi,bj) * vIceRESLoc(i,j,  bi,bj)
+     &          + vIceRESLoc(i,j+1,bi,bj) * vIceRESLoc(i,j+1,bi,bj)
+     &          ) )
+          ENDDO
+         ENDDO
+       CALL DIAGNOSTICS_FILL(IceRESMagLoc,'SIRESmag',0,1,3,bi,bj,myThid)
+        ENDDO
+       ENDDO
+
+       
+        _BEGIN_MASTER( myThid )
+        WRITE(standardMessageUnit,'(A,1X,I9,1P3E16.8)')
+     &    ' Lizzs Mean Residual to the full system: iter,Uice,Vice=',
+     &        myIter, residU, residV
+
+      ENDIF
+         
+
+       
 C     Writing everything to diagnostics
        IF ( useDiagnostics ) THEN
 C         CALL DIAGNOSTICS_FILL(dUdtX,'mdUdtX  ',0,1,0,1,1,myThid)
@@ -148,8 +218,15 @@ C         CALL DIAGNOSTICS_FILL(dUdtY,'mdUdtY  ',0,1,0,1,1,myThid)
          CALL DIAGNOSTICS_FILL(vIceRHSLoc,'vIceRHS ',0,1,0,1,1,myThid)
          CALL DIAGNOSTICS_FILL(uIceRESLoc,'uIceRES ',0,1,0,1,1,myThid)
          CALL DIAGNOSTICS_FILL(vIceRESLoc,'vIceRES ',0,1,0,1,1,myThid)
-       ENDIF 
+C         CALL DIAGNOSTICS_FILL(IceRESMagLoc,'SIRESmag',0,1,0,1,1,myThid)
 
+      ENDIF
+
+
+
+
+
+       
 #endif /* (  ALLOW_DIAGNOSTICS && defined SEAICE_CGRID )*/
       RETURN
       END
@@ -268,8 +345,8 @@ C     - Cdrag*(uVel*cosWat - vVel*sinWat)/(vVel*cosWat + uVel*sinWat)
 C     ( remember to average to correct velocity points )
 C
       MuoldDt(I,J,bi,bj)   =
-     &           seaiceMassU(I,J,bi,bj)*recip_deltaT
-     &         *uIce_prev(I,J,bi,bj) *maskinW(I,J,bi,bj)
+     &          (seaiceMassU(I,J,bi,bj)*recip_deltaT
+     &         *uIce_prev(I,J,bi,bj) *maskinW(I,J,bi,bj)) *areaW(I,J)
       uDWUo(I,J,bi,bj)   = ( 
      &         0.5 _d 0 * ( DWATN(I,J,bi,bj)+DWATN(I-1,J,bi,bj) )*
      &         COSWAT * uVel(I,J,kSrf,bi,bj)
@@ -281,8 +358,8 @@ C
      &           ) )*areaW(I,J)*maskinW(I,J,bi,bj)
 C     V component of RHS of the model momentum equation 
       MvoldDt(I,J,bi,bj) =
-     &         seaiceMassV(I,J,bi,bj)*recip_deltaT
-     &         *vIce_prev(I,J,bi,bj) *maskinS(I,J,bi,bj)
+     &         (seaiceMassV(I,J,bi,bj)*recip_deltaT
+     &         *vIce_prev(I,J,bi,bj) *maskinS(I,J,bi,bj))*areaS(I,J)
       vDWUo(I,J,bi,bj)    = (
      &         0.5 _d 0 * (DWATN(I,J,bi,bj)+DWATN(I,J-1,bi,bj) ) *
      &         COSWAT * vVel(I,J,kSrf,bi,bj)
@@ -294,9 +371,11 @@ C     V component of RHS of the model momentum equation
      &     ) )*maskinS(I,J,bi,bj)
 C       
          uIceRHS(I,J,bi,bj) = (MuoldDt(I,J,bi,bj) + uDWUo(I,J,bi,bj)
-     &     + TILTx(I,J,bi,bj) + TAU_AI_X(I,J,bi,bj) )*maskinW(I,J,bi,bj)
+     &     + TILTx(I,J,bi,bj) + TAU_AI_X(I,J,bi,bj)
+     &       )*maskinW(I,J,bi,bj)*areaW(I,J)
          vIceRHS(I,J,bi,bj) = (MvoldDt(I,J,bi,bj) + vDWUo(I,J,bi,bj)
-     &     + TILTy(I,J,bi,bj) + TAU_AI_Y(I,J,bi,bj) )*maskinS(I,J,bi,bj)
+     &        + TILTy(I,J,bi,bj) + TAU_AI_Y(I,J,bi,bj)
+     &         )*maskinS(I,J,bi,bj)*areaS(I,J)
          ENDDO
         ENDDO
        ENDDO
@@ -461,17 +540,17 @@ C     compute lhs side of momentum equations
          DO I=1,sNx
 C     mass*(uIce)/deltaT - dsigma/dx
           dsigX(I,J,bi,bj) = -dsigX(I,J,bi,bj)
-     &                 * maskinW(I,J,bi,bj)
+     &                 * maskinW(I,J,bi,bj)* areaW(I,J)
           MunewDt(I,J,bi,bj) =
-     &         seaiceMassU(I,J,bi,bj)*recip_deltaT
-     &         *uIceLoc(I,J,bi,bj) *maskinW(I,J,bi,bj)
+     &         (seaiceMassU(I,J,bi,bj)*recip_deltaT
+     &         *uIceLoc(I,J,bi,bj) *maskinW(I,J,bi,bj))* areaW(I,J)
 C     coriols terms: - mass*f*vIce
           coriX(I,J,bi,bj) = (- 0.5 _d 0*(
      &         seaiceMassC(I  ,J,bi,bj) * _fCori(I  ,J,bi,bj)
      &       * 0.5 _d 0*( vIceLoc(I  ,J,bi,bj)+vIceLoc(I  ,J+1,bi,bj) )
      &       + seaiceMassC(I-1,J,bi,bj) * _fCori(I-1,J,bi,bj)
      &       * 0.5 _d 0*( vIceLoc(I-1,J,bi,bj)+vIceLoc(I-1,J+1,bi,bj) )
-     &           ))*maskinW(I,J,bi,bj)
+     &           ))*maskinW(I,J,bi,bj)* areaW(I,J)
 C     ocean-ice and bottom drag terms: + (Cdrag*cosWat+Cb)*uIce - vIce*sinWat)
           uDWUi(I,J,bi,bj) =  (
      &         0.5 _d 0 * ( dragSym(I,J)+dragSym(I-1,J) )
@@ -485,17 +564,17 @@ C     ocean-ice and bottom drag terms: + (Cdrag*cosWat+Cb)*uIce - vIce*sinWat)
           
 C     mass*(vIce)/deltaT - dsigma/dy
           dsigY(I,J,bi,bj) = - dsigY(I,J,bi,bj)
-     &                 *maskinS(I,J,bi,bj)
+     &                 *maskinS(I,J,bi,bj)* areaS(I,J)
           MvnewDt(I,J,bi,bj) =
      &         seaiceMassV(I,J,bi,bj)*recip_deltaT
-     &         *vIceLoc(I,J,bi,bj)*maskinS(I,J,bi,bj)
+     &         *vIceLoc(I,J,bi,bj)*maskinS(I,J,bi,bj)* areaS(I,J)
 C     + mass*f*uIce
           coriY(I,J,bi,bj) = (0.5 _d 0*(
      &         seaiceMassC(I,J  ,bi,bj) * _fCori(I,J  ,bi,bj)
      &       * 0.5 _d 0*( uIceLoc(I,J  ,bi,bj)+uIceLoc(I+1,  J,bi,bj) )
      &       + seaiceMassC(I,J-1,bi,bj) * _fCori(I,J-1,bi,bj)
      &       * 0.5 _d 0*( uIceLoc(I,J-1,bi,bj)+uIceLoc(I+1,J-1,bi,bj) )
-     &           ))*maskinS(I,J,bi,bj)
+     &           ))*maskinS(I,J,bi,bj)* areaS(I,J)
 C    + (Cdrag*cosWat+Cb)*uIce + uIce*sinWat)
           vDWUi(I,J,bi,bj) =  (
      &         0.5 _d 0 * ( dragSym(I,J)+dragSym(I,J-1) )
@@ -507,10 +586,10 @@ C    + (Cdrag*cosWat+Cb)*uIce + uIce*sinWat)
      &         (uIceLoc(I,J-1,bi,bj)+uIceLoc(I+1,J-1,bi,bj))
      &         ) ) * areaS(I,J)*maskinS(I,J,bi,bj)
 C     apply masks for interior (important when we have open boundaries)
-          uIceLHS(I,J,bi,bj) = dsigX(I,J,bi,bj) + MunewDt(I,J,bi,bj) +
-     &         coriX(I,J,bi,bj) + uDWUi(I,J,bi,bj)
-          vIceLHS(I,J,bi,bj) = dsigY(I,J,bi,bj) + MvnewDt(I,J,bi,bj) +
-     &         coriY(I,J,bi,bj) + vDWUi(I,J,bi,bj)
+          uIceLHS(I,J,bi,bj) = (dsigX(I,J,bi,bj) + MunewDt(I,J,bi,bj) +
+     &         coriX(I,J,bi,bj) + uDWUi(I,J,bi,bj))* areaW(I,J)
+          vIceLHS(I,J,bi,bj) = (dsigY(I,J,bi,bj) + MvnewDt(I,J,bi,bj) +
+     &         coriY(I,J,bi,bj) + vDWUi(I,J,bi,bj))* areaS(I,J)
          ENDDO
         ENDDO
 #ifdef SEAICE_ALLOW_MOM_ADVECTION
