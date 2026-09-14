@@ -383,8 +383,15 @@ C     Elastic-Viscous-Plastic solver, following Hunke (2001)
 
        IF ( SEAICEuseLSR ) THEN
 C     Picard solver with LSR scheme (Zhang-J/Hibler 1997), ported to a C-grid
-          PRINT *,'LSR Solver activated'
-        CALL SEAICE_LSR( myTime, myIter, myThid )
+C          PRINT *,'LSR Solver activated'
+          CALL SEAICE_LSR( myTime, myIter, myThid )
+          PRINT *, 'LSR solver is complete and Lizzs subroutine begins'
+          CALL SEAICE_CALC_MOMBUDGET(
+     I     uIce, vIce,
+     &     TILTx, TILTy, TAU_AI_X, TAU_AI_Y,uIce_prev,vIce_prev,
+     I         myTime, myIter, myThid )
+          PRINT *, 'Lizzs subroutine completed'
+
        ENDIF
 
 # ifdef SEAICE_ALLOW_KRYLOV
@@ -418,10 +425,11 @@ C End of IF (SEAICEuseDYNAMICS and DIFFERENT_MULTIPLE ...
 
 
 CEAW [ output all terms in momentum budget]
-      CALL SEAICE_CALC_MOMBUDGET(
-     I     uIce, vIce,
-     &     TILTx, TILTy, TAU_AI_X, TAU_AI_Y,uIce_prev,vIce_prev,
-     I     myTime, myIter, myThid )
+C      PRINT *, 'Lizzs subroutine starts'
+c      CALL SEAICE_CALC_MOMBUDGET(
+C     I     uIce, vIce,
+C     &     TILTx, TILTy, TAU_AI_X, TAU_AI_Y,uIce_prev,vIce_prev,
+C     I     myTime, myIter, myThid )
 
 
 
