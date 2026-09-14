@@ -15,17 +15,16 @@
  rhonil=1027.5,
  rhoConstFresh=999.8,
  eosType='JMD95Z',
+ viscC4Leith   = 1.5,
+ viscC4Leithd  = 1.5,
  hFacMinDr=50.,
  hFacMin=0.3,
  hFacInf=0.1,
  hFacSup=5.,
  implicitDiffusion=.TRUE.,
  implicitViscosity=.TRUE.,
- viscC4Leith=1.5,
- viscC4Leithd=1.5,
  viscA4GridMax=0.5,
  useAreaViscLength=.TRUE.,
- sideDragFactor=0.,
  highOrderVorticity  = .TRUE.,
  bottomDragQuadratic = 0.0021,
  tempAdvScheme=7,
@@ -38,11 +37,9 @@
 #debuglevel=-1,
  convertFW2Salt=-1
  useSingleCPUio=.TRUE.,
+# readBinaryPrec=64,
+# writeBinaryPrec=64,
 #globalFiles=.TRUE.,
-# To run using Crank Nicolson, switch the below to 0.5
-# Default is 1, and LLC used 0.6
-# implicSurfPress = 0.6,
-# implicDiv2DFlow = 0.6,
  &
 
 # Elliptic solver parameters
@@ -54,15 +51,18 @@
 
 # Time stepping parameters
  &PARM03
+#niter0=421627, 
  niter0=157680,
+# niter0=187102,
+# niter0=237111,
 # endtime=599594400.,
 # 20years  + 1 timestep
 # nTimeSteps=175680,
 # nTimeSteps=1000,
 # test for 6 steps
- nTimeSteps=5
+ nTimeSteps=5,
 # run for ~4years:
-# nTimeSteps = 355200,
+# nTimeSteps = 35520000,
 # 370 days + 1 timestep
 # nTimeSteps=8880,
 #pickupSuff = 'start',

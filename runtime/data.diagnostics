@@ -4,7 +4,7 @@
  &diagnostics_list
 #--
 
-  fields(1:40,1) =  
+  fields(1:42,1) =  
   		    'MunewDt ','MvnewDt ',
   		    'MuoldDt ','MvoldDt ',
                     'coriX   ','coriY   ',
@@ -13,9 +13,11 @@
                     'TAU_AI_X','TAU_AI_Y',
                     'TILTx   ','TILTy   ',
                     'dsigX   ','dsigY   ',
-                    'uIceRES ','vIceRES ',		    
+                    'uIceRES ','vIceRES ',
+		    'SIRESmag',
 		    'SIlsrRe ','ETAN    ',
 		    'SIarea  ','SIheff  ',
+		    'SIhsnow',
 		    'SIuice  ','SIvice  ',
 		    'SImassU ','SImassV ',
 		    'SIeta   ','SIzeta  ',
@@ -43,6 +45,17 @@
 		   'oceTAUX ','oceTAUY ',		   
   fileName(3)   = 'ds_atm',
   frequency(3)  = 1800.,
+
+#  fields(1:12,4) =
+#                   'eplus   ','eminus  ',
+#		   'DXsig11E','DXsig11Z',
+#		   'DXsig11P','DYsig22E',
+#		   'DYsig22Z','DYsig22P',
+#		   'DXsig12E','DYsig12E',
+#		   'dsigXtst','dsigYtst',
+#  fileName(4)   = 'ds_tst',
+#  frequency(4)  = 604800.,
+
 
 #  fields(1:17,4) =
 #                   'oceTAUX ','oceTAUY ',
