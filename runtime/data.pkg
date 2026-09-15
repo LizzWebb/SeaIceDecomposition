@@ -8,6 +8,6 @@
  useOBCS        = .TRUE.,
  useKPP         = .TRUE.,
 # Change to match LLC 
- useSALT_PLUME  = .FALSE.,
+ useSALT_PLUME  = .TRUE.,
 
 &
