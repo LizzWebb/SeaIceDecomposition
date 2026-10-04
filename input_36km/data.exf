@@ -15,15 +15,15 @@
  &
 #
  &EXF_NML_02
- precipfile        = '../forcing/era_interim_arctic/ei_tp',
-#apressurefile     = '../forcing/era_interim_arctic/ei_msl',
- atempfile         = '../forcing/era_interim_arctic/ei_2t',
- aqhfile           = '../forcing/era_interim_arctic/ei_aqh',
- swdownfile        = '../forcing/era_interim_arctic/ei_ssrd',
- lwdownfile        = '../forcing/era_interim_arctic/ei_strd',
- uwindfile         = '../forcing/era_interim_arctic/ei_10u',
- vwindfile         = '../forcing/era_interim_arctic/ei_10v',
- runofffile        = '../forcing/runoff1p2472-360x180x12.bin',
+ precipfile        = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_tp',
+#apressurefile     = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_msl',
+ atempfile         = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_2t',
+ aqhfile           = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_aqh',
+ swdownfile        = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_ssrd',
+ lwdownfile        = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_strd',
+ uwindfile         = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_10u',
+ vwindfile         = '/storage/mloch/arctic36km/forcing/era_interim_arctic/ei_10v',
+ runofffile        = '/storage/mloch/arctic36km/forcing/runoff1p2472-360x180x12.bin',
 #
 
 
