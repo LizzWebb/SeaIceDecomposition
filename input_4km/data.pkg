@@ -1,0 +1,13 @@
+# Packages
+ &PACKAGES
+ useSEAICE      = .TRUE.,
+ useGMRedi      = .FALSE.,
+ useDiagnostics = .TRUE.,
+ useEXF         = .TRUE.,
+ useCAL         = .TRUE.,
+ useOBCS        = .TRUE.,
+ useKPP         = .TRUE.,
+# Change to match LLC 
+ useSALT_PLUME  = .TRUE.,
+
+&

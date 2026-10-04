@@ -1,0 +1,8 @@
+
+/input_4km/pickup*
+/input_4km/pickup*
+/input_4km/*.data
+/input_4km/*.meta
+/input_4km/*.log
+/input_4km/**/*~
+/input_4km/mitgcmuv
