@@ -1,0 +1,134 @@
+# Diagnostic Package Choices
+#
+
+ &diagnostics_list
+#--
+
+  fields(1:42,1) =  
+  		    'MunewDt ','MvnewDt ',
+  		    'MuoldDt ','MvoldDt ',
+                    'coriX   ','coriY   ',
+                    'uDWUi   ','vDWUi   ',
+                    'uDWUo   ','vDWUo   ',
+                    'TAU_AI_X','TAU_AI_Y',
+                    'TILTx   ','TILTy   ',
+                    'dsigX   ','dsigY   ',
+                    'uIceRES ','vIceRES ',
+		    'SIRESmag',
+		    'SIlsrRe ','ETAN    ',
+		    'SIarea  ','SIheff  ',
+		    'SIhsnow',
+		    'SIuice  ','SIvice  ',
+		    'SImassU ','SImassV ',
+		    'SIeta   ','SIzeta  ',
+		    'SIpress ','SIdelta ',
+		    'SItensil','SIshear ',
+		    'SIsig1  ','SIsig2  ',
+		    'SIsigm11','SIsigm22',
+		    'SIsigm12',
+		    'SIstre11','SIstre22',
+		    'SIstre12',
+  fileName(1)   = 'ds_SI',
+  frequency(1)  = 1800.,
+
+  fields(1:6,2) =  'SALT    ','THETA   ',
+                   'UVEL    ','VVEL    ',
+                   'WVEL    ','momKE   ',
+  fileName(2)   = 'ds_vert',
+  frequency(2)  = 1800.,
+
+  fields(1:6,3) =
+  		   'TAU_AO_X','TAU_AO_Y',
+#                   'EXFurelw','EXFvrelw',
+                   'EXFuwind','EXFvwind',
+#		   'EXFtaux ','EXFtauy ',
+		   'oceTAUX ','oceTAUY ',		   
+  fileName(3)   = 'ds_atm',
+  frequency(3)  = 1800.,
+
+#  fields(1:12,4) =
+#                   'eplus   ','eminus  ',
+#		   'DXsig11E','DXsig11Z',
+#		   'DXsig11P','DYsig22E',
+#		   'DYsig22Z','DYsig22P',
+#		   'DXsig12E','DYsig12E',
+#		   'dsigXtst','dsigYtst',
+#  fileName(4)   = 'ds_tst',
+#  frequency(4)  = 604800.,
+
+
+#  fields(1:17,4) =
+#                   'oceTAUX ','oceTAUY ',
+#                   'EXFtaux ','EXFtauy ',
+#		   'SItaux  ','SItauy  ',
+#		   'SIatmTx ','SIatmTy ',
+#                   'TAU_AO_X','TAU_AO_Y',
+#                   'EXFurelw','EXFvrelw',
+#                   'EXFuwind','EXFvwind',
+#                   'UVEL    ','VVEL    ',
+#  fileName(4)   = 'ds_testing',
+#  frequency(4)  = 1800.,
+
+
+
+
+#  fields(1:24,4) =
+#                   'ETANSQ  ','SALTanom',
+#		   'SALTSQ  ','SALTSQan',
+#		   'UVELSQ  ','VVELSQ  ',
+#		   'UE_VEL_C','VN_VEL_C',
+#		   'UV_VEL_C','UV_VEL_Z',
+#		   'WU_VEL  ','WV_VEL  ',
+
+
+#		   'UVELMASS','VVELMASS',
+#		   'WVELMASS','RHOAnoma',
+#		   'RHOANOSQ','URHOMASS',
+#		   'VRHOMASS','WRHOMASS',
+#		   'WdRHO_P ','WdRHOdP ',
+#		   'PHIHYD  ','PHIHYDSQ',
+#  fileName(4)   = 'ds_extras',
+#  frequency(4)  = 86400.,
+
+#  fields(1:33,5) =
+#                   'PHIBOT  ','PHIBOTSQ',
+#                   'PHIHYDcR','MXLDEPTH',
+#                   'TOTUTEND','TOTVTEND',
+#                   'Vm_Advec','Um_Cori ',
+#                   'Vm_Cori ','Um_dPhiX',
+#                   'Vm_dPhiY','Um_Ext  ',
+#                   'Vm_Ext  ','Um_hDis2',
+#                   'Vm_hDis2','Um_hDis4',
+#                   'Vm_hDis4','Um_AdvZ3',
+#                   'Vm_AdvZ3','Um_AdvRe',
+#                   'Vm_AdvRe','Um_Metr ',
+#                   'Vm_Metr ','EXFwspee',
+#                   'KPPviscA','SIhsnow ',
+#                   'SIenpa  ','SIenpw  ',
+#                   'SItaux  ','SItauy  ',
+#                   'SIatmTx ','SIatmTy ',
+#                   'SIdA    ',
+#  fileName(5)   = 'ds_moreextras',
+#  frequency(5)  = 86400.,
+
+
+ &
+
+# Parameter for Diagnostics of per level statistics:
+#-----------------
+# for each output-stream:
+#  stat_fname(n) : prefix of the output file name (only 8.c long) for
+#outp.stream n
+#  stat_freq(n):< 0 : write snap-shot output every |stat_freq| seconds
+#               > 0 : write time-average output every stat_freq seconds
+#  stat_phase(n)    : write at time = stat_phase + multiple of |stat_freq|
+#  stat_region(:,n) : list of "regions" (default: 1 region only=global)
+#  stat_fields(:,n) : list of diagnostics fields (8.c) (see
+#"available_diagnostics.log"
+#                 file for the list of all available diag. in this particular
+#config)
+#-----------------
+ &DIAG_STATIS_PARMS
+#- an example just to check the agreement with MONITOR output:
+
+ &

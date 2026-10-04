@@ -1,0 +1,29 @@
+# SEAICE parameters
+ &SEAICE_PARM01
+#      SEAICEnonLinIterMax = 10,
+#      SEAICElinearIterMax = 1500,
+       LSR_ERROR           = 1.0E-12,
+       SEAICE_multDim     = 7,
+#
+      SEAICE_dryIceAlb   = 0.7,
+      SEAICE_wetIceAlb   = 0.7060,
+      SEAICE_drySnowAlb  = 0.8652,
+      SEAICE_wetSnowAlb  = 0.8085,
+      SEAICE_waterDrag   = 0.0054138,
+      SEAICE_drag        = 0.00114,
+      HO                 = 0.05,
+# Default ice strength = 2.75E+04      
+
+      SEAICE_no_slip     = .TRUE.,
+      SEAICEadvScheme    = 77,
+
+      MIN_ATEMP          = -40.,
+      MIN_TICE           = -40.,
+      SEAICE_area_reg = 0.15,
+      SEAICE_hice_reg = 0.1,
+      IMAX_TICE = 6,
+      SEAICE_EPS = 1.E-8,
+      SEAICE_doOpenWaterMelt = .TRUE.,
+      SEAICE_areaLossFormula = 1,
+
+ &
