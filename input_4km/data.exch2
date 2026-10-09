@@ -1,6 +1,6 @@
 &W2_EXCH2_PARM01
 #W2_printMsg = 1,
- W2_mapIO = 0,
+ W2_mapIO = 1,
  dimsFacets = 1680,1536,
 
 &
